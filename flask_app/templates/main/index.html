@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <header class="site-header">
+      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+        <div class="container">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+            </div>
+        </div>
+      </nav>
+    </header>
+    <div class="modal-content">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Payload</legend>
+                <div class="form-group">
+                    <label class="form-control-label" for="user_id">User ID</label>
+                    <input class="form-control" type="text" placeholder="{{ session.user }}" readonly>
+                </div>
+                <div class="form-group">
+                    {{ form.mandatory_string_field.label(class="form-control-label") }}
+                    {% if form.mandatory_string_field.errors %}
+                        {{ form.mandatory_string_field(class="form-control form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.mandatory_string_field.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.mandatory_string_field(class="form-control form-control") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.optional_string_field.label(class="form-control-label") }}
+                    {% if form.optional_string_field.errors %}
+                        {{ fform.optional_string_field(class="form-control form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.optional_string_field.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.optional_string_field(class="form-control form-control") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        {% if category == "success" %}
+                            Congratulations! Your form has been submitted successfully!
+                        {% endif %}
+                        <div class="alert alert-{{ category }}" style='padding: 3px; width: 500px; word-break: break-all; word-wrap: break-word;'>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </form>
+    </div>
+    <div class="border-top pt-3">
+        <small class="text-muted">
+            Not sure what you're looking at? <a class="ml-2" href="google.com">Go to the docs!</a>
+        </small>
+    </div>
+{% endblock content %}
